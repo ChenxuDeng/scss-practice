@@ -1,0 +1,71 @@
+$spacing:(
+  'sm':8px,
+  'md':16px,
+  'lg':24px
+);
+
+$breakpoints:(
+        'sm':600px,
+        'md':960px,
+        'lg':1280px
+);
+
+$justifyContent:(
+  center,flex-start,flex-end,space-between
+);
+
+$alignItems:(center,flex-start,flex-end);
+
+@mixin breakpoints($name){
+  @media screen and (min-width: map-get($breakpoints,$name)) {
+    @content
+  }
+}
+
+.grid{
+  &_container{
+    display: flex;
+    flex-wrap: wrap; //使元素在主轴宽度不够排不下时自动换行
+  }
+  &_item{
+    display: block;
+  }
+
+  @for $i from 1 to 13{
+    &_xs_#{$i}{
+      flex-basis: $i/12*100%; //i与传入的col数字关联更改样式 flex-basis是元素在主轴上的初始宽度与width相似
+    }
+
+
+
+  @each $name,$value in $breakpoints{
+    @include breakpoints($name){
+      @for $i from 1 to 13{
+        &_#{$name}_#{$i}{
+          flex-basis: $i/12*100%; //i与传入的col数字关联更改样式 flex-basis是元素在主轴上的初始宽度与width相似
+        }
+      }
+    }
+  }
+
+  @each $name,$value in $spacing{ //遍历出&_spacing_sm,&_spacing_md和&_spacing_lg
+    &_spacing_#{$name}{
+      margin:-$value //去掉container grid的padding
+    }
+
+    &_spacing_#{$name}>&_item{
+      padding:$value
+    }
+
+  @each $value in $justifyContent{
+    &_justifyContent_#{$value}{
+      justify-content: $value;
+    }
+  }
+
+    @each $value in $alignItems{
+      &_alignItems_#{$value}{
+        align-items: $value;
+      }
+    }
+}}}
